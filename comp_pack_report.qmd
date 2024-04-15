@@ -221,7 +221,7 @@ toc()
 head(diffs_no_index_r$survey_mm)
 ```
 
-When using an index, the extraction is slightly faster, still above 2 seconds.
+When using an index, the extraction is slightly faster, but still above 2 seconds.
 
 ```{r rCompare diffs index}
 tic()
