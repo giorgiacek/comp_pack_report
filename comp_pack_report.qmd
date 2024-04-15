@@ -5,15 +5,16 @@ format:
   html:
     toc: true
     toc-location: right
-    code-fold: true
+    code-fold: false
 ---
 
 ```{r setup, include=FALSE}
+library(data.table)
+library(dplyr)
 library(arsenal)
 library(dataCompareR)
 library(microbenchmark)
 library(ggplot2)
-library(tidytable)
 library(tictoc)
 ```
 
@@ -102,9 +103,9 @@ The `survey` dataset is a sample of random variables from IPUMS - CPS. There are
 head(survey)
 ```
 
-## CompareDF
+### CompareDF
 
-### Creation of comparison object
+#### Creation of comparison object
 
 ```{r compareDF compare no-index}
 tic()
@@ -117,8 +118,12 @@ tic()
 index_comparison_object <- comparedf(survey, survey_modified, by=c('CPSID', 'PERNUM', 'YEAR', 'SERIAL'))
 toc()
 ```
+The final object has this structure:
+```{r compareDF structure, echo=FALSE}
+str(index_comparison_object, max.level = 1)
+```
 
-### Creation of summary
+#### Creation of summary
 
 ```{r compareDF summary no-index}
 tic()
@@ -131,8 +136,12 @@ tic()
 summary_of_index_object <- summary(index_comparison_object)
 toc()
 ```
+The final summary object has this structure:
+```{r compareDF summary structure, echo=FALSE}
+str(summary_of_index_object, max.level = 1)
+```
 
-### Extracting mismatches
+#### Extracting mismatches
 
 The function used is `arsenal::diffs()`. It extracts mismatched rows, but results needs to be pivoted to be used as a dataframe.
 
@@ -146,10 +155,16 @@ toc()
 ```{r compareDF diffs print}
 head(diffs_index)
 ```
+You can actually extract this table directly from the summary object:
+```{r compareDF diffs summary}
+head(summary_of_index_object$diffs.table)
+```
 
-## rCompare
 
-### Creation of comparison object
+### rCompare
+
+#### Creation of comparison object
+rCompare takes much longer to compare two datasets. Notice that it also warns the user about the data being potentially too large.
 
 ```{r rCompare compare no-index}
 tic()
@@ -164,9 +179,20 @@ index_comparison_object_r <- rCompare(survey, survey_modified,
 toc()
 ```
 
-### Creation of summary
 
-The creation of the summary is really quick for both cases.
+The final object has this structure:
+```{r rCompare compare structure, echo=FALSE}
+str(index_comparison_object_r,max.level = 1)
+```
+You can already access the mismatches directly from this object. In the nested list `mismatches`, the object contains one dataframe per variable, with differences between datasets:
+```{r rCompare compare mismatches}
+head(index_comparison_object_r$mismatches$ASECWTH)
+```
+
+
+#### Creation of summary
+
+The creation of the summary is really quick for both cases. 
 
 ```{r rCompare summary}
 tic()
@@ -174,8 +200,12 @@ summary_of_no_index_object_r <- summary(no_index_comparison_object_r)
 summary_of_index_object_r <- summary(no_index_comparison_object_r)
 toc()
 ```
+The final summary object has this structure:
+```{r rCompare summary structure}
+str(summary_of_index_object_r, max.level = 1)
+```
 
-### Extracting mismatches
+#### Extracting mismatches
 
 It takes a bit longer to extract mismatched rows using `generateMismatchData()`, around 3.4 seconds. The output is a list with mismatched rows from both datasets.
 
@@ -184,6 +214,7 @@ tic()
 diffs_no_index_r <- generateMismatchData(index_comparison_object_r, survey, survey_modified)
 toc()
 ```
+
 
 ```{r rCompare diffs print}
 # mismatched rows from first dataset (survey)
@@ -194,6 +225,6 @@ When using an index, the extraction is slightly faster, still above 2 seconds.
 
 ```{r rCompare diffs index}
 tic()
-diffs_index_r <- generateMismatchData(index_comparison_object_r, survey, survey_subset)
+diffs_index_r <- generateMismatchData(index_comparison_object_r, survey, survey_modified)
 toc()
 ```
