@@ -1,0 +1,199 @@
+---
+title: "Comparison Packages Report"
+date: 2024-04-15
+format: 
+  html:
+    toc: true
+    toc-location: right
+    code-fold: true
+---
+
+```{r setup, include=FALSE}
+library(arsenal)
+library(dataCompareR)
+library(microbenchmark)
+library(ggplot2)
+library(tidytable)
+library(tictoc)
+```
+
+## Simple Datasets (numeric only)
+
+Here we run a very quick comparison of the workhorse function of two packages `arsenal::compareDF` and `dataCompareR::rCompare`. The dataset is just a simple collection of random numerical variables. We use the package `microbenchmark` and run it 10 times.
+
+### Dataset set-up
+
+```{r simple data}
+# Define the sizes of the datasets to benchmark
+sizes <- c(10000, 50000, 100000, 200000)
+num_vars <- 30
+
+# Create a function to generate data
+generate_data <- function(n, num_vars) {
+  as.data.frame(matrix(runif(n * num_vars), nrow = n))
+}
+
+```
+
+### Generate data and create benchmarks
+
+```{r simple benchmark, output=FALSE}
+# Initialize an empty list to store results
+benchmark_results <- list()
+
+# Benchmarking loop
+for (size in sizes) {
+  df1 <- generate_data(size, num_vars)
+  df2 <- generate_data(size, num_vars)
+  
+  # Perform the benchmark
+  benchmark_results[[as.character(size)]] <- microbenchmark(
+    comparedf = comparedf(df1, df2),
+    rCompare = rCompare(df1, df2),
+    times = 10  # Number of times to run each test, adjust as needed
+  )
+}
+```
+
+### Adjust data
+
+```{r simple adjust}
+plot_data <- do.call(rbind, lapply(names(benchmark_results), function(x) {
+  transform(
+    summary(benchmark_results[[x]]),
+    size = as.numeric(x)
+  )
+}))
+
+plot_data <- plot_data |>
+  mutate(across(c(min, mean, max), ~if_else(size == 2e+05, . * 1000, .)))
+
+```
+
+### Plot
+
+```{r simple plot, echo=FALSE}
+ggplot(plot_data, aes(x = factor(size), y = mean, fill = expr)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  geom_errorbar(aes(ymin = min, ymax = max), position = position_dodge(width = 0.9), width = 0.25) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(x = "Dataset Size (number of observations)",
+       y = "Time (milliseconds)",
+       fill = "Function",
+       title = "arsenal::comparedf vs dataCompareR::rCompare",
+       subtitle = "Mean execution time with error bars representing min and max times") +
+  theme_minimal()
+```
+
+## Survey Data Example
+
+Here we look at the differences between the two packages when used on a larger dataset. We also compare the functions which allow the user to extract mismatched data: `arsenal::diffs()` and `dataCompareR::generateMismatchData()`. Here we are going to use the package `tictoc` to simply print the time of execution of each step.
+
+### Load Data
+
+```{r survey load-data}
+survey <- readRDS("data/survey_subset.rds")
+survey_modified <- readRDS("data/survey_modified.rds")
+```
+
+The `survey` dataset is a sample of random variables from IPUMS - CPS. There are approximately 102k observations and 43 variables.
+
+```{r survey print-data}
+head(survey)
+```
+
+## CompareDF
+
+### Creation of comparison object
+
+```{r compareDF compare no-index}
+tic()
+no_index_comparison_object <- comparedf(survey, survey_modified)
+toc()
+```
+
+```{r compareDF compare index}
+tic()
+index_comparison_object <- comparedf(survey, survey_modified, by=c('CPSID', 'PERNUM', 'YEAR', 'SERIAL'))
+toc()
+```
+
+### Creation of summary
+
+```{r compareDF summary no-index}
+tic()
+summary_of_no_index_object <- summary(no_index_comparison_object)
+toc()
+```
+
+```{r compareDF summary index}
+tic()
+summary_of_index_object <- summary(index_comparison_object)
+toc()
+```
+
+### Extracting mismatches
+
+The function used is `arsenal::diffs()`. It extracts mismatched rows, but results needs to be pivoted to be used as a dataframe.
+
+```{r compareDF diffs}
+tic()
+diffs_no_index <- diffs(no_index_comparison_object)
+diffs_index <- diffs(index_comparison_object)
+toc()
+```
+
+```{r compareDF diffs print}
+head(diffs_index)
+```
+
+## rCompare
+
+### Creation of comparison object
+
+```{r rCompare compare no-index}
+tic()
+no_index_comparison_object_r <- rCompare(survey, survey_modified)
+toc()
+```
+
+```{r rCompare compare index}
+tic()
+index_comparison_object_r <- rCompare(survey, survey_modified,
+                                      keys=c('CPSID', 'PERNUM', 'YEAR', 'SERIAL'))
+toc()
+```
+
+### Creation of summary
+
+The creation of the summary is really quick for both cases.
+
+```{r rCompare summary}
+tic()
+summary_of_no_index_object_r <- summary(no_index_comparison_object_r)
+summary_of_index_object_r <- summary(no_index_comparison_object_r)
+toc()
+```
+
+### Extracting mismatches
+
+It takes a bit longer to extract mismatched rows using `generateMismatchData()`, around 3.4 seconds. The output is a list with mismatched rows from both datasets.
+
+```{r rCompare diffs no-index}
+tic()
+diffs_no_index_r <- generateMismatchData(index_comparison_object_r, survey, survey_modified)
+toc()
+```
+
+```{r rCompare diffs print}
+# mismatched rows from first dataset (survey)
+head(diffs_no_index_r$survey_mm)
+```
+
+When using an index, the extraction is slightly faster, still above 2 seconds.
+
+```{r rCompare diffs index}
+tic()
+diffs_index_r <- generateMismatchData(index_comparison_object_r, survey, survey_subset)
+toc()
+```
