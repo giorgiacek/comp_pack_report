@@ -228,3 +228,49 @@ tic()
 diffs_index_r <- generateMismatchData(index_comparison_object_r, survey, survey_modified)
 toc()
 ```
+
+
+## Survey Data Microbenchmark
+
+To conclude, in the package `arsenal`, the mismatch data we are interested in are contained in the `summary()` object. In the package `rCompare`, the mismatch data are contained in the main object. In both cases, the data needs to be pivoted to be used as a dataframe. In `rCompare`, the function ` generateMismatchData()` does the pivot, but this takes an additional 3 seconds. 
+
+We now compare the two ways to extract the mismatched rows before pivoting:
+```{r survey benchmark, output=FALSE}
+benchmark_results_survey <- microbenchmark(
+    compareDF_summary_noindex = summary(comparedf(survey, survey_modified)),
+    compareDF_summary_index  = summary(comparedf(survey, survey_modified, by=c('CPSID', 'PERNUM', 'YEAR', 'SERIAL'))),
+    rCompare_noindex = rCompare(survey, survey_modified),
+    rCompare_index = rCompare(survey, survey_modified, keys=c('CPSID', 'PERNUM', 'YEAR', 'SERIAL')),
+    times = 10  # Number of times each expression is evaluated
+)
+
+```
+```{r survey benchmark plot}
+plot_data_survey <- summary(benchmark_results_survey)
+ggplot(plot_data_survey, aes(x = expr, y = mean, fill = expr)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  geom_errorbar(aes(ymin = min, ymax = max), position = position_dodge(width = 0.9), width = 0.25) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_discrete(labels = c("","","",""))+
+  labs(x = "",
+       y = "Time (seconds)",
+       fill = "Function",
+       title = "arsenal::comparedf vs dataCompareR::rCompare",
+       subtitle = "Mean execution time with error bars representing min and max times") +
+  theme_minimal()
+```
+```{r}
+print(plot_data_survey)
+```
+
+
+## Conclusions
+
+- `arsenal`:
+  - The mismatch data are available, but the format is not ideal and needs to be pivoted.
+  - More or less the same time with indexed or non-indexed data.
+
+- `dataCompare`:
+  - The mismatch data are available; they can be pivoted for an additional 3 seconds.
+  - Indexing data makes the estimation so much longer (because based on `dplyr`?).
+

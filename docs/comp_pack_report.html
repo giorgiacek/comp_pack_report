@@ -122,6 +122,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#comparedf" id="toc-comparedf" class="nav-link" data-scroll-target="#comparedf">CompareDF</a></li>
   <li><a href="#rcompare" id="toc-rcompare" class="nav-link" data-scroll-target="#rcompare">rCompare</a></li>
   </ul></li>
+  <li><a href="#survey-data-microbenchmark" id="toc-survey-data-microbenchmark" class="nav-link" data-scroll-target="#survey-data-microbenchmark">Survey Data Microbenchmark</a></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a></li>
   </ul>
 </nav>
     </div>
@@ -275,7 +277,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>no_index_comparison_object <span class="ot">&lt;-</span> <span class="fu">comparedf</span>(survey, survey_modified)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>3.98 sec elapsed</code></pre>
+<pre><code>3.64 sec elapsed</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -283,7 +285,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>index_comparison_object <span class="ot">&lt;-</span> <span class="fu">comparedf</span>(survey, survey_modified, <span class="at">by=</span><span class="fu">c</span>(<span class="st">'CPSID'</span>, <span class="st">'PERNUM'</span>, <span class="st">'YEAR'</span>, <span class="st">'SERIAL'</span>))</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>4.16 sec elapsed</code></pre>
+<pre><code>4 sec elapsed</code></pre>
 </div>
 </div>
 <p>The final object has this structure:</p>
@@ -305,7 +307,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>summary_of_no_index_object <span class="ot">&lt;-</span> <span class="fu">summary</span>(no_index_comparison_object)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.02 sec elapsed</code></pre>
+<pre><code>0 sec elapsed</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -313,7 +315,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>summary_of_index_object <span class="ot">&lt;-</span> <span class="fu">summary</span>(index_comparison_object)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0 sec elapsed</code></pre>
+<pre><code>0.01 sec elapsed</code></pre>
 </div>
 </div>
 <p>The final summary object has this structure:</p>
@@ -411,7 +413,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>2.42 sec elapsed</code></pre>
+<pre><code>2.06 sec elapsed</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -429,7 +431,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>13.73 sec elapsed</code></pre>
+<pre><code>11.11 sec elapsed</code></pre>
 </div>
 </div>
 <p>The final object has this structure:</p>
@@ -483,7 +485,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.17 sec elapsed</code></pre>
+<pre><code>0.14 sec elapsed</code></pre>
 </div>
 </div>
 <p>The final summary object has this structure:</p>
@@ -498,7 +500,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  $ rounding             : logi FALSE
  $ roundDigits          : num 0
  $ version              :Classes 'package_version', 'numeric_version'  hidden list of 1
- $ runtime              : POSIXct[1:1], format: "2024-04-15 18:11:23"
+ $ runtime              : POSIXct[1:1], format: "2024-04-15 19:04:29"
  $ rversion             : chr "R version 4.3.2 (2023-10-31 ucrt)"
  $ datasetSummary       :'data.frame':  2 obs. of  3 variables:
  $ ncolCommon           : int 43
@@ -539,7 +541,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>3.62 sec elapsed</code></pre>
+<pre><code>3.33 sec elapsed</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -592,13 +594,74 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>4.16 sec elapsed</code></pre>
+<pre><code>2.89 sec elapsed</code></pre>
 </div>
 </div>
-
-
 </section>
 </section>
+</section>
+<section id="survey-data-microbenchmark" class="level2">
+<h2 class="anchored" data-anchor-id="survey-data-microbenchmark">Survey Data Microbenchmark</h2>
+<p>To conclude, in the package <code>arsenal</code>, the mismatch data we are interested in are contained in the <code>summary()</code> object. In the package <code>rCompare</code>, the mismatch data are contained in the main object. In both cases, the data needs to be pivoted to be used as a dataframe. In <code>rCompare</code>, the function <code>generateMismatchData()</code> does the pivot, but this takes an additional 3 seconds.</p>
+<p>We now compare the two ways to extract the mismatched rows before pivoting:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>benchmark_results_survey <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">compareDF_summary_noindex =</span> <span class="fu">summary</span>(<span class="fu">comparedf</span>(survey, survey_modified)),</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">compareDF_summary_index  =</span> <span class="fu">summary</span>(<span class="fu">comparedf</span>(survey, survey_modified, <span class="at">by=</span><span class="fu">c</span>(<span class="st">'CPSID'</span>, <span class="st">'PERNUM'</span>, <span class="st">'YEAR'</span>, <span class="st">'SERIAL'</span>))),</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">rCompare_noindex =</span> <span class="fu">rCompare</span>(survey, survey_modified),</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">rCompare_index =</span> <span class="fu">rCompare</span>(survey, survey_modified, <span class="at">keys=</span><span class="fu">c</span>(<span class="st">'CPSID'</span>, <span class="st">'PERNUM'</span>, <span class="st">'YEAR'</span>, <span class="st">'SERIAL'</span>)),</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">times =</span> <span class="dv">10</span>  <span class="co"># Number of times each expression is evaluated</span></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>plot_data_survey <span class="ot">&lt;-</span> <span class="fu">summary</span>(benchmark_results_survey)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(plot_data_survey, <span class="fu">aes</span>(<span class="at">x =</span> expr, <span class="at">y =</span> mean, <span class="at">fill =</span> expr)) <span class="sc">+</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>)) <span class="sc">+</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> min, <span class="at">ymax =</span> max), <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>), <span class="at">width =</span> <span class="fl">0.25</span>) <span class="sc">+</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">""</span>,<span class="st">""</span>,<span class="st">""</span>,<span class="st">""</span>))<span class="sc">+</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>,</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Time (seconds)"</span>,</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Function"</span>,</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"arsenal::comparedf vs dataCompareR::rCompare"</span>,</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Mean execution time with error bars representing min and max times"</span>) <span class="sc">+</span></span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="comp_pack_report_files/figure-html/survey benchmark plot-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plot_data_survey)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                       expr      min        lq      mean    median        uq
+1 compareDF_summary_noindex 2.875742  3.084056  3.187246  3.109727  3.306981
+2   compareDF_summary_index 3.300551  3.445788  3.812072  3.573976  3.627182
+3          rCompare_noindex 1.755713  1.809679  2.059287  2.131182  2.226785
+4            rCompare_index 9.884467 10.290338 10.762246 10.750000 11.109072
+        max neval
+1  3.815816    10
+2  6.412882    10
+3  2.487803    10
+4 11.635600    10</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
+<ul>
+<li><code>arsenal</code>:
+<ul>
+<li>The mismatch data are available, but the format is not ideal and needs to be pivoted.</li>
+<li>More or less the same time with indexed or non-indexed data.</li>
+</ul></li>
+<li><code>dataCompare</code>:
+<ul>
+<li>The mismatch data are available; they can be pivoted for an additional 3 seconds.</li>
+<li>Indexing data makes the estimation so much longer (because based on <code>dplyr</code>?).</li>
+</ul></li>
+</ul>
+
+
 </section>
 
 </main> <!-- /main -->
